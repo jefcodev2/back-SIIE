@@ -35,27 +35,6 @@ const getUsuarios = async (req, res) => {
 
 
 
-const getRol = async (req, res) => {
-  try {
-   
-    const usuarioId = req.uid;
-
-    //console.log('Usuario: ' + usuarioId);
-
-    const id_role = await db_postgres.oneOrNone("SELECT rol_id FROM sec_users WHERE id = $1", [usuarioId]);
-    const rol = await db_postgres.any("SELECT descripcion FROM sec_roles WHERE id = $1", [id_role.rol_id]);
-
-    res.json({
-      ok: true,
-      rol,
-    });
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      msg: "Error al obtener los datos",
-    });
-  }
-};
 
 const getUsuarioById = async (req, res) => {
   const id = req.params.id;
@@ -222,42 +201,10 @@ const updateActivateUser = async (req, res = response) => {
 };
 
 
-const getPermisos = async (usuarioId, res) => {
-  try {
-    console.log("getPermisos uid: " + usuarioId);
-
-    const rolResult = await db_postgres.oneOrNone(
-      "SELECT rol_id FROM sec_users WHERE id = $1",
-      [usuarioId]
-    );
-    console.log("Rol result: ", rolResult.rol_id);
-
-    const id_rol = rolResult.rol_id;
-
-    const permisosResult = await db_postgres.any("SELECT p.nombre FROM sec_permisos AS p JOIN roles_modulos_permisos AS rmp ON rmp.id_permiso = p.id WHERE rmp.id_rol = $1", [id_rol]);
-
-    const permisos = permisosResult.map((row) => row.nombre);
-
-    console.log('Permisos: ' + permisos);
-
-    if (Array.isArray(permisos) && permisos.length > 0) {
-      return permisos;
-    } else {
-      console.log("No se encontraron filas en el resultado.");
-      return [];
-    }
-  } catch (error) {
-    console.error("Error en getPermisos:", error);
-    throw error;
-  }
-};
-
 
 module.exports = {
   getUsuarios,
-  getRol,
   getUsuarioById,
-  getPermisos,
   createUsuario,
   deleteUsuario,
   updateUsuario,

@@ -45,17 +45,14 @@ const renewToken = async (req, res = response) => {
 
     const token = await generarJWT(uid);
 
-    const usuarioDB = await db_postgres.oneOrNone("SELECT * FROM sec_users WHERE id = $1", [uid]);
-    const rol_id = usuarioDB.rol_id;
+    const usuarioDB = await db_postgres.oneOrNone("SELECT * FROM users WHERE id = $1", [uid]);
 
-    const result_role = await db_postgres.oneOrNone("SELECT descripcion FROM sec_roles WHERE id = $1", [rol_id]);
 
     delete usuarioDB.password;
 
     const successResponse = new StandardResponse(true, "Token renovado", {
       token,
-      usuario: usuarioDB,
-      menu: getMenuFrontend(result_role.descripcion),
+      usuario: usuarioDB
     });
 
     return res.status(200).json(successResponse.toJSON());

@@ -14,8 +14,8 @@ const { validarPermisos } = require('../../middlewares/validar-permisos');
 const router = Router();
 
 
-router.get('/', [validarJWT, validarPermisos(['Admin'])], getUsuarios);
-router.get('/role',validarJWT, getRol);
+router.get('/', [validarJWT], getUsuarios);
+
 
 //router.get('/',  getPermisos);
 router.post('/', /* [validarJWT,validarPermisos(['Admin'])],[validarJWT], */
