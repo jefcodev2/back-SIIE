@@ -24,6 +24,9 @@ app.use('/api/v1/login/', require('./routes/auth'));
 // users
 app.use('/api/v1/usuarios', require('./routes/seguridad/usuarios'));
 
+// survey
+app.use('/api/v1/survey', require('./routes/survey/survey'));
+
 
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en puerto ' + process.env.PORT)
